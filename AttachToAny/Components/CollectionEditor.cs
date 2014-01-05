@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RyanConrad.AttachToAny.Extensions;
 
 namespace RyanConrad.AttachToAny.Components {
 	public class CollectionEditor : System.ComponentModel.Design.CollectionEditor {
 		public CollectionEditor ( Type type )
 			: base ( type ) {
-
 		}
 
 		private CollectionForm EditorForm { get; set; }
@@ -34,6 +35,7 @@ namespace RyanConrad.AttachToAny.Components {
 		/// </returns>
 		protected override System.ComponentModel.Design.CollectionEditor.CollectionForm CreateCollectionForm ( ) {
 			this.EditorForm = base.CreateCollectionForm ( ); ;
+			this.EditorForm.Text = this.CollectionItemType.GetCustomAttributeValue<DisplayNameAttribute, String> ( x => x.DisplayName );
 			return this.EditorForm;
 		}
 
@@ -41,10 +43,22 @@ namespace RyanConrad.AttachToAny.Components {
 			return new Type[] { this.CollectionItemType };
 		}
 
+		/// <summary>
+		/// Indicates whether original members of the collection can be removed.
+		/// </summary>
+		/// <param name="value">The value to remove.</param>
+		/// <returns>
+		/// true if it is permissible to remove this value from the collection; otherwise, false. The default implementation always returns true.
+		/// </returns>
+		protected override bool CanRemoveInstance ( object value ) {
+			return base.CanRemoveInstance ( value );
+		}
+
 	}
 
 	public class CollectionEditor<T> : CollectionEditor {
-		public CollectionEditor ( ) : base(typeof(T)) {
+		public CollectionEditor ( )
+			: base ( typeof ( T ) ) {
 
 		}
 

@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
-using Microsoft.Win32;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using RyanConrad.AttachToAny.Options;
-using EnvDTE;
-using System.Linq;
-using RyanConrad.AttachToAny.Components;
-using System.Windows.Forms;
 
 
 namespace RyanConrad.AttachToAny {
@@ -34,7 +25,6 @@ namespace RyanConrad.AttachToAny {
 	[InstalledProductRegistration ( "#110", "#112", "1.0", IconResourceID = 400 )]
 	// This attribute is needed to let the shell know that this package exposes some menus.
 	[ProvideMenuResource ( "Menus.ctmenu", 1 )]
-	// This attribute registers a tool window exposed by this package.
 	[ProvideOptionPage ( typeof ( GeneralOptionsPage ), "AttachToAny", "General", 110, 120, false )]
 	[Guid ( GuidList.guidAttachToAnyPkgString )]
 	[ProvideAutoLoad ( Microsoft.VisualStudio.Shell.Interop.UIContextGuids.NoSolution )]
@@ -52,7 +42,6 @@ namespace RyanConrad.AttachToAny {
 		/// initialization is the Initialize method.
 		/// </summary>
 		public AttachToAnyPackage ( ) {
-			Debug.WriteLine ( string.Format ( CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString ( ) ) );
 		}
 
 		#region Package Members

@@ -127,10 +127,11 @@
   <ItemGroup>
     <Compile Include="AttachDescriptor.cs" />
     <Compile Include="Components\CollectionEditor.cs" />
-    <Compile Include="Components\DescriptorMenuCommand.cs" />
     <Compile Include="Components\IListTypeConverter.cs" />
     <Compile Include="Components\StringListUIEditor.cs" />
+    <Compile Include="Extensions\Type.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="IRemovable.cs" />
     <Compile Include="MenuBuilder.cs" />
     <Compile Include="Options\GeneralOptionsPage.cs">
       <SubType>Component</SubType>
@@ -143,7 +144,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="AttachToAnyPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PkgCmdID.cs" />
+    <Compile Include="ATAConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

@@ -12,7 +12,7 @@ using RyanConrad.AttachToAny.Options;
 
 namespace RyanConrad.AttachToAny {
 	class MenuBuilder {
-		private int baseAttactListId = (int)PkgCmdIDList.cmdidAttachList;
+		private int baseAttactListId = (int)ATAConstants.cmdidAttachToAnyDynamicStart;
 
 		public MenuBuilder ( GeneralOptionsPage optionsPage ) {
 			OptionsPage = optionsPage;
@@ -21,84 +21,49 @@ namespace RyanConrad.AttachToAny {
 		private GeneralOptionsPage OptionsPage { get; set; }
 		public void BuildMenuItems ( OleMenuCommandService mcs ) {
 			var items = OptionsPage.Attachables.Where ( f => f.Enabled );
-
-			ClearItems ( mcs );
-
-
 			if ( items != null ) {
 				var count = items.Count ( );
 				for ( var i = 0; i < count; ++i ) {
-					uint id = (uint)( ( baseAttactListId + i ) );
+					int id = baseAttactListId + i;
 					AddAttachCommand ( mcs, id, x => x.Attachables[i] );
 				}
-			} else {
-				AddNoneCommand ( mcs );
-			}
-		}
-
-		private void ClearItems ( OleMenuCommandService mcs ) {
-			var found = false;
-			var idx = 0;
-			do {
-				CommandID cid = new CommandID ( GuidList.guidAttachToAnyCmdSet, baseAttactListId + idx );
-				var cmd = mcs.FindCommand ( cid );
-				found = cmd != null;
-				if ( found ) {
-					Debug.WriteLine ( "Remove: {0}", cmd.CommandID.ID );
-					mcs.RemoveCommand ( cmd );
-				}
-				++idx;
-			} while ( found );
-
+			} 
 		}
 
 		/// <summary>
 		/// Adds the attach command.
 		/// </summary>
-		/// <param name="mcs">The MCS.</param>
+		/// <param name="mcs">The Menu Command Service.</param>
 		/// <param name="getDescriptor">The get descriptor.</param>
-		private void AddAttachCommand ( OleMenuCommandService mcs, uint commandId, Func<GeneralOptionsPage, AttachDescriptor> getDescriptor ) {
-			var descriptor = getDescriptor ( OptionsPage );
-			var menuItem = new OleMenuCommand (
-				delegate ( object s, EventArgs e ) {
-					if ( OptionsPage.DTE != null ) {
-						foreach ( EnvDTE.Process process in OptionsPage.DTE.Debugger.LocalProcesses ) {
-							if ( descriptor.ProcessNames.Any ( p => process.Name.EndsWith ( p ) ) ) {
-								process.Attach ( );
+		private void AddAttachCommand ( OleMenuCommandService mcs, int commandId, Func<GeneralOptionsPage, AttachDescriptor> getDescriptor ) {
+			if ( mcs != null ) {
+				var commandIdentifier = new CommandID ( GuidList.guidAttachToAnyCmdSet, commandId );
+				if ( mcs.FindCommand ( commandIdentifier ) != null ) {
+					return;
+				}
+				var descriptor = getDescriptor ( OptionsPage );
+				var menuItem = new OleMenuCommand (
+					delegate ( object s, EventArgs e ) {
+						if ( OptionsPage.DTE != null ) {
+							// todo: multiple matches dialog.
+							foreach ( EnvDTE.Process process in OptionsPage.DTE.Debugger.LocalProcesses ) {
+								if ( descriptor.ProcessNames.Any ( p => process.Name.EndsWith ( p ) ) ) {
+									process.Attach ( );
+								}
 							}
+						} else {
+							Debug.WriteLine ( "DTE is NULL" );
 						}
-					} else {
-						Debug.WriteLine ( "DTE is NULL" );
-					}
-				},
-				new CommandID ( GuidList.guidAttachToAnyCmdSet, (int)commandId ),
-				descriptor.ToString ( )
-			);
-			menuItem.BeforeQueryStatus += ( s, e ) => {
-				menuItem.Visible = descriptor.Enabled;
-			};
-
-			mcs.AddCommand ( menuItem );
-		}
-
-		private void AddNoneCommand ( OleMenuCommandService mcs ) {
-			var descriptor = new AttachDescriptor {
-				Enabled = true,
-				Name = "None",
-				ProcessNames = new string[] { "none-here-to.attach" }
-			};
-			var menuItem = new OleMenuCommand (
-				delegate ( object s, EventArgs e ) {
-
-				},
-				new CommandID ( GuidList.guidAttachToAnyCmdSet, (int)baseAttactListId ),
-				descriptor.ToString ( )
-			);
-			menuItem.BeforeQueryStatus += ( s, e ) => {
-				menuItem.Enabled = false;
-			};
-
-			mcs.AddCommand ( menuItem );
+					},
+					commandIdentifier,
+					 String.Format ( "{0}{1}", descriptor.PrependAttachTo ? "Attach To " : "", descriptor.ToString ( ) )
+				);
+				menuItem.BeforeQueryStatus += ( s, e ) => {
+					menuItem.Visible = descriptor.Enabled && descriptor.ProcessNames.Count ( ) > 0;
+					menuItem.Text = String.Format ( "{0}{1}", descriptor.PrependAttachTo ? "Attach To " : "", descriptor.ToString ( ) );
+				};
+				mcs.AddCommand ( menuItem );
+			}
 		}
 	}
 }
