@@ -32,6 +32,7 @@ namespace RyanConrad.AttachToAny.Options {
 
 		protected override void OnApply ( PageApplyEventArgs e ) {
 			if ( e.ApplyBehavior == ApplyKind.Apply ) {
+				SaveSettingsToStorage ( );
 				LoadSettingsFromStorage ( );
 			}
 			base.OnApply ( e );
