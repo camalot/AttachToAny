@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 namespace RyanConrad.AttachToAny.Extensions {
-	public static class AttachToAnyExtensions {
+	public static partial class AttachToAnyExtensions {
 
 		/// <summary>
 		/// Gets the custom attribute.

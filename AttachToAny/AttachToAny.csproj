@@ -126,11 +126,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachDescriptor.cs" />
+    <Compile Include="Extensions\String.cs" />
+    <Compile Include="Options\ATASettings.cs" />
     <Compile Include="Components\CollectionEditor.cs" />
     <Compile Include="Components\IListTypeConverter.cs" />
     <Compile Include="Components\StringListUIEditor.cs" />
     <Compile Include="Extensions\Type.cs" />
-    <Compile Include="Guids.cs" />
+    <Compile Include="ATAGuids.cs" />
     <Compile Include="IRemovable.cs" />
     <Compile Include="MenuBuilder.cs" />
     <Compile Include="Options\GeneralOptionsPage.cs">

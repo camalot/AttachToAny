@@ -9,16 +9,12 @@ using RyanConrad.AttachToAny.Components;
 
 namespace RyanConrad.AttachToAny {
 	[DisplayName("Attach Descriptor")]
-	public class AttachDescriptor : IRemovable {
+	public class AttachDescriptor {
 		public AttachDescriptor ( ) {
 			Enabled = true;
 			ProcessNames = new List<string> ( );
 			PrependAttachTo = true;
-			IsRemovable = true;
 		}
-		[Browsable(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public bool IsRemovable { get; set; }
 
 		[DisplayName ( "(Name)" )]
 		[Category ( "General" )]

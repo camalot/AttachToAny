@@ -3,6 +3,7 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using RyanConrad.AttachToAny.Options;
 
 
@@ -26,7 +27,7 @@ namespace RyanConrad.AttachToAny {
 	// This attribute is needed to let the shell know that this package exposes some menus.
 	[ProvideMenuResource ( "Menus.ctmenu", 1 )]
 	[ProvideOptionPage ( typeof ( GeneralOptionsPage ), "AttachToAny", "General", 110, 120, false )]
-	[Guid ( GuidList.guidAttachToAnyPkgString )]
+	[Guid ( ATAGuids.guidAttachToAnyPkgString )]
 	[ProvideAutoLoad ( Microsoft.VisualStudio.Shell.Interop.UIContextGuids.NoSolution )]
 	[ProvideAutoLoad ( Microsoft.VisualStudio.Shell.Interop.UIContextGuids.SolutionExists )]
 	[ProvideAutoLoad ( Microsoft.VisualStudio.Shell.Interop.UIContextGuids.FullScreenMode )]
@@ -54,8 +55,26 @@ namespace RyanConrad.AttachToAny {
 			base.Initialize ( );
 			var mcs = GetService ( typeof ( IMenuCommandService ) ) as OleMenuCommandService;
 			if ( null != mcs ) {
-				var menuBuilder = new MenuBuilder ( this.GetDialogPage ( typeof ( GeneralOptionsPage ) ) as GeneralOptionsPage );
+				var dialog = GetDialogPageSafe<GeneralOptionsPage> ( );
+
+				var menuBuilder = new MenuBuilder ( dialog );
+				dialog.SettingsLoaded += ( s, e ) => {
+					menuBuilder.BuildMenuItems ( mcs );
+				};
+
 				menuBuilder.BuildMenuItems ( mcs );
+
+				
+
+			//var main = new OleMenuCommand ( null, new CommandID ( ATAGuids.guidAttachToAnyCmdSet, (int)ATAConstants.cmdidAttachToAnyMainMenu ) );
+			//mcs.AddCommand ( main );
+
+				var settings = new OleMenuCommand ( ( s, e ) => {
+					ShowOptionPageSafe<GeneralOptionsPage> ( );
+				}, new CommandID ( ATAGuids.guidAttachToAnyCmdSet, (int)ATAConstants.cmdidAttachToAny ) );
+				mcs.AddCommand ( settings );
+
+
 			}
 		}
 
@@ -75,7 +94,6 @@ namespace RyanConrad.AttachToAny {
 		/// <param name="key">The name of the option key to load.</param>
 		/// <param name="stream">The stream to load the option data from.</param>
 		protected override void OnLoadOptions ( string key, System.IO.Stream stream ) {
-			Debug.WriteLine ( "OnLoadOptions: {0}", key );
 			base.OnLoadOptions ( key, stream );
 		}
 
@@ -91,22 +109,27 @@ namespace RyanConrad.AttachToAny {
 		#endregion
 
 
+		private void ShowOptionPageSafe<T> ( ) {
+			try {
+				ShowOptionPage ( typeof ( T ) );
+			} catch ( Exception ) {
+
+			}
+		}
+
+		private T GetDialogPageSafe<T> ( ) where T : DialogPage {
+			try {
+				return (T)this.GetDialogPage ( typeof ( T ) );
+			} catch ( Exception ) {
+				return default ( T );
+			}
+		}
 		/// <summary>
 		/// This function is called when the user clicks the menu item that shows the 
 		/// tool window. See the Initialize method to see how the menu item is associated to 
 		/// this function using the OleMenuCommandService service and the MenuCommand class.
 		/// </summary>
 		private void ShowToolWindow ( object sender, EventArgs e ) {
-			// Get the instance number 0 of this tool window. This window is single instance so this instance
-			// is actually the only one.
-			// The last flag is set to true so that if the tool window does not exists it will be created.
-			//ToolWindowPane window = this.FindToolWindow(typeof(MyToolWindow), 0, true);
-			//if ((null == window) || (null == window.Frame))
-			//{
-			//		throw new NotSupportedException(Resources.CanNotCreateWindow);
-			//}
-			//IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
-			//Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
 		}
 
 	}

@@ -20,6 +20,10 @@ namespace RyanConrad.AttachToAny {
 
 		private GeneralOptionsPage OptionsPage { get; set; }
 		public void BuildMenuItems ( OleMenuCommandService mcs ) {
+			if ( OptionsPage.Attachables == null ) {
+				Debug.WriteLine ( "ATA: No Attachables found." );
+				throw new ArgumentNullException ( "attachables" );
+			}
 			var items = OptionsPage.Attachables.Where ( f => f.Enabled );
 			if ( items != null ) {
 				var count = items.Count ( );
@@ -37,7 +41,7 @@ namespace RyanConrad.AttachToAny {
 		/// <param name="getDescriptor">The get descriptor.</param>
 		private void AddAttachCommand ( OleMenuCommandService mcs, int commandId, Func<GeneralOptionsPage, AttachDescriptor> getDescriptor ) {
 			if ( mcs != null ) {
-				var commandIdentifier = new CommandID ( GuidList.guidAttachToAnyCmdSet, commandId );
+				var commandIdentifier = new CommandID ( ATAGuids.guidAttachToAnyCmdSet, commandId );
 				if ( mcs.FindCommand ( commandIdentifier ) != null ) {
 					return;
 				}

@@ -9,6 +9,16 @@
 			</Group>
 		</Groups>
 		<Buttons>
+
+			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny" priority="0x1001" type="Button">
+				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+				<Strings>
+					<CommandName>cmdidAttachToAny</CommandName>
+					<ButtonText>AttachToAny Settings</ButtonText>
+				</Strings>
+			</Button>
+
+
 			<!-- 1 - 10 -->
 			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny001" priority="0x0001" type="Button">
 				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
