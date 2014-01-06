@@ -61,7 +61,6 @@ namespace RyanConrad.AttachToAny.Options {
 										items.Add ( new AttachDescriptor {
 											Name = (string)key.GetValue ( ATASettings.Keys.AttachDescriptorName.With ( i ) ),
 											Enabled = bool.Parse ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ) ) ),
-											PrependAttachTo = bool.Parse ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorPrependAttachTo.With ( i ) ) ),
 											ProcessNames = ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ) ) )
 														.Split ( new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries )
 										} );
@@ -116,7 +115,6 @@ namespace RyanConrad.AttachToAny.Options {
 							}
 
 							key.SetValue ( ATASettings.Keys.AttachDescriptorName.With ( i ), item.Name );
-							key.SetValue ( ATASettings.Keys.AttachDescriptorPrependAttachTo.With ( i ), item.PrependAttachTo.ToString ( ).ToLowerInvariant ( ) );
 							key.SetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), item.Enabled.ToString ( ).ToLowerInvariant ( ) );
 							key.SetValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), String.Join ( ";", item.ProcessNames ) );
 

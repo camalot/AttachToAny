@@ -6,7 +6,7 @@ namespace RyanConrad.AttachToAny {
 	static class ATAConstants {
 		public const uint MaxCommands = 20;
 
-		public const uint cmdidAttachToAnyMainMenu = 0x010;
+		public const uint idAttachToAnyMain = 0x0101;
 	
 		public const uint cmdidAttachToAny = 0x100;
 		public const uint cmdidAttachToAnyToolWindow = 0x101;

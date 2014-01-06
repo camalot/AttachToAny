@@ -1,18 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="177f0816-76a7-401a-87d5-e793c9def1d1" Version="1.0" Language="en-US" Publisher="Ryan Conrad" />
-    <DisplayName>AttachToAny</DisplayName>
-    <Description>Attach Visual Studio to any running process.</Description>
-  </Metadata>
-  <Installation InstalledByMsi="false">
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0]" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.12.0" DisplayName="Visual Studio MPF 12.0" d:Source="Installed" Version="[12.0]" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-  </Assets>
+	<Metadata>
+		<Identity Id="177f0816-76a7-401a-87d5-e793c9def1d1" Version="1.0.1" Language="en-US" Publisher="Ryan Conrad" />
+		<DisplayName>AttachToAny</DisplayName>
+		<Description xml:space="preserve">Attach Visual Studio to any running process. Configure up to 20 shortcuts for attaching Visual Studio debugger to.
+***Currently in Beta***
+
+I started this project because AttachTo was not supported in VS2013 and I wanted to be able to add additional items to attach to. This is a work in progress and a learning experience as it is my first VSExtension. 
+
+----
+
+Support for other version of Visual Studio will come later. 
+A cleaner menu system will come soon as well.</Description>
+		<MoreInfo>https://github.com/camalot/AttachToAny</MoreInfo>
+		<License>LICENSE.txt</License>
+		<GettingStartedGuide>http://blog.twimager.com/2014/01/published-my-first-visual-studio.html</GettingStartedGuide>
+		<ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
+		<PreviewImage>ata-preview.png</PreviewImage>
+		<Tags>debug, debugger, debugging</Tags>
+	</Metadata>
+	<Installation InstalledByMsi="false">
+		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0]" />
+	</Installation>
+	<Dependencies>
+		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+		<Dependency Id="Microsoft.VisualStudio.MPF.12.0" DisplayName="Visual Studio MPF 12.0" d:Source="Installed" Version="[12.0]" />
+	</Dependencies>
+	<Assets>
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+	</Assets>
 </PackageManifest>

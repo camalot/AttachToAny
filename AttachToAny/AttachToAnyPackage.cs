@@ -71,7 +71,7 @@ namespace RyanConrad.AttachToAny {
 
 				var settings = new OleMenuCommand ( ( s, e ) => {
 					ShowOptionPageSafe<GeneralOptionsPage> ( );
-				}, new CommandID ( ATAGuids.guidAttachToAnyCmdSet, (int)ATAConstants.cmdidAttachToAny ) );
+				}, new CommandID ( ATAGuids.guidAttachToAnySettingsGroup, (int)ATAConstants.cmdidAttachToAny ) );
 				mcs.AddCommand ( settings );
 
 

@@ -41,7 +41,7 @@ namespace RyanConrad.AttachToAny {
 		/// <param name="getDescriptor">The get descriptor.</param>
 		private void AddAttachCommand ( OleMenuCommandService mcs, int commandId, Func<GeneralOptionsPage, AttachDescriptor> getDescriptor ) {
 			if ( mcs != null ) {
-				var commandIdentifier = new CommandID ( ATAGuids.guidAttachToAnyCmdSet, commandId );
+				var commandIdentifier = new CommandID ( ATAGuids.guidAttachToAnyCmdGroup, commandId );
 				if ( mcs.FindCommand ( commandIdentifier ) != null ) {
 					return;
 				}
@@ -60,11 +60,11 @@ namespace RyanConrad.AttachToAny {
 						}
 					},
 					commandIdentifier,
-					 String.Format ( "{0}{1}", descriptor.PrependAttachTo ? "Attach To " : "", descriptor.ToString ( ) )
+					descriptor.ToString ( )
 				);
 				menuItem.BeforeQueryStatus += ( s, e ) => {
 					menuItem.Visible = descriptor.Enabled && descriptor.ProcessNames.Count ( ) > 0;
-					menuItem.Text = String.Format ( "{0}{1}", descriptor.PrependAttachTo ? "Attach To " : "", descriptor.ToString ( ) );
+					menuItem.Text = descriptor.ToString ( );
 				};
 				mcs.AddCommand ( menuItem );
 			}

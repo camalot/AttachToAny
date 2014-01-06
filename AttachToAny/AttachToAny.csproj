@@ -133,7 +133,6 @@
     <Compile Include="Components\StringListUIEditor.cs" />
     <Compile Include="Extensions\Type.cs" />
     <Compile Include="ATAGuids.cs" />
-    <Compile Include="IRemovable.cs" />
     <Compile Include="MenuBuilder.cs" />
     <Compile Include="Options\GeneralOptionsPage.cs">
       <SubType>Component</SubType>
@@ -176,6 +175,20 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\ReleaseNotes.txt">
+      <Link>ReleaseNotes.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ata-preview.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <PropertyGroup>

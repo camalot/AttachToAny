@@ -13,7 +13,6 @@ namespace RyanConrad.AttachToAny {
 		public AttachDescriptor ( ) {
 			Enabled = true;
 			ProcessNames = new List<string> ( );
-			PrependAttachTo = true;
 		}
 
 		[DisplayName ( "(Name)" )]
@@ -30,11 +29,6 @@ namespace RyanConrad.AttachToAny {
 		[Category ( "General" )]
 		[Description("Enable/Disable this menu item.")]
 		public bool Enabled { get; set; }
-		[DefaultValue ( true )]
-		[Category ( "General" )]
-		[Description ( "Should 'Attach To' preface the item name in the menu?" )]
-		public bool PrependAttachTo { get; set; }
-
 		public override string ToString ( ) {
 			var text =	String.IsNullOrWhiteSpace ( Name ) ? 
 					( ProcessNames == null || ProcessNames.Count() == 0 ? 

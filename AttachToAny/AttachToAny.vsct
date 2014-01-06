@@ -4,14 +4,37 @@
 	<Extern href="vsshlids.h"/>
 	<Commands package="guidAttachToAnyPkg">
 		<Groups>
-			<Group guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup" priority="0x100">
+			<!-- The top level group that is added to the tools menu -->
+			<Group guid="guidAttachToTopLevelMenuGroup" id="AttachToTopLevelMenuGroup" priority="0x000">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
 			</Group>
+			
+			<!-- The Group that lives as a child to the TLG (TopLevelGroup) -->
+			<!-- all the items are added to this -->
+			<Group guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup" priority="0x100">
+				<Parent guid="guidAttachToAnyCmdGroup" id="idAttachToAnyMain"/>
+			</Group>
+
+			<Group guid="guidAttachToAnySettingsGroup" id="AttachToAnySettingsGroup" priority="0x100">
+				<Parent guid="guidAttachToAnyCmdGroup" id="idAttachToAnyMain"/>
+			</Group>
 		</Groups>
+
+		<Menus>
+			
+			<!-- This menu is added to the TLG (TopLevelGroup) -->
+			<Menu guid="guidAttachToAnyCmdGroup" id="idAttachToAnyMain" priority="0x000" type="Menu">
+				<Parent guid="guidAttachToTopLevelMenuGroup" id="AttachToTopLevelMenuGroup"/>
+				<Strings>
+					<ButtonText>AttachToAny</ButtonText>
+				</Strings>
+			</Menu>
+		</Menus>
+		
 		<Buttons>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny" priority="0x1001" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnySettingsGroup" id="cmdidAttachToAny" priority="0x1001" type="Button">
+				<Parent guid="guidAttachToAnySettingsGroup" id="AttachToAnySettingsGroup"/>
 				<Strings>
 					<CommandName>cmdidAttachToAny</CommandName>
 					<ButtonText>AttachToAny Settings</ButtonText>
@@ -20,8 +43,8 @@
 
 
 			<!-- 1 - 10 -->
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny001" priority="0x0001" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny001" priority="0x0001" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -31,8 +54,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny002" priority="0x0002" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny002" priority="0x0002" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -42,8 +65,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny003" priority="0x0003" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny003" priority="0x0003" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -53,8 +76,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny004" priority="0x0004" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny004" priority="0x0004" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -64,8 +87,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny005" priority="0x0005" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny005" priority="0x0005" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -75,8 +98,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny006" priority="0x0006" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny006" priority="0x0006" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -86,8 +109,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny007" priority="0x0007" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny007" priority="0x0007" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -97,8 +120,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny008" priority="0x0008" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny008" priority="0x0008" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -108,8 +131,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny009" priority="0x0009" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny009" priority="0x0009" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -119,8 +142,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny010" priority="0x0010" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny010" priority="0x0010" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -131,8 +154,8 @@
 			</Button>
 
 			<!-- 11 - 20 -->
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny011" priority="0x0011" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny011" priority="0x0011" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -142,8 +165,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny012" priority="0x0012" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny012" priority="0x0012" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -153,8 +176,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny013" priority="0x0013" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny013" priority="0x0013" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -164,8 +187,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny014" priority="0x0014" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny014" priority="0x0014" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -175,8 +198,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny015" priority="0x0015" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny015" priority="0x0015" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -186,8 +209,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny016" priority="0x0016" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny016" priority="0x0016" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -197,8 +220,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny017" priority="0x0017" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny017" priority="0x0017" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -208,8 +231,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny018" priority="0x0018" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny018" priority="0x0018" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -219,8 +242,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny019" priority="0x0019" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny019" priority="0x0019" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -230,8 +253,8 @@
 				</Strings>
 			</Button>
 
-			<Button guid="guidAttachToAnyCmdSet" id="cmdidAttachToAny020" priority="0x0020" type="Button">
-				<Parent guid="guidAttachToAnyCmdSet" id="AttachToAnyMenuGroup"/>
+			<Button guid="guidAttachToAnyCmdGroup" id="cmdidAttachToAny020" priority="0x0020" type="Button">
+				<Parent guid="guidAttachToAnyCmdGroup" id="AttachToAnyMenuGroup"/>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -250,13 +273,20 @@
 		<!-- This is the package guid. -->
 		<GuidSymbol name="guidAttachToAnyPkg" value="{177f0816-76a7-401a-87d5-e793c9def1d1}" />
 
-		<!-- This is the guid used to group the menu commands together -->
-		<GuidSymbol name="guidAttachToAnyCmdSet" value="{245c3215-3d66-40e8-bafe-29fb71a00061}">
-			<IDSymbol name="AttachToAnyMenuGroup" value="0x1020" />
-			<IDSymbol name="cmdidAttachToAny" value="0x0100" />
+		<GuidSymbol name="guidAttachToTopLevelMenuGroup" value="{9e9593e9-d7a1-4875-a434-0b9f7b48a7aa}">
+			<IDSymbol name="AttachToTopLevelMenuGroup" value="0x01002"/>
+		</GuidSymbol>
 
-			<IDSymbol name="AttachToAnySubMenuGroup" value="0x1030"/>
-			<IDSymbol name="AttachToAnyItemsMenuGroup" value="0x1040"/>
+		<GuidSymbol name="guidAttachToAnySettingsGroup" value="{fe5c3b97-e53f-480d-9ad0-c41238c05731}">
+			<IDSymbol name="AttachToAnySettingsGroup" value="0x1003"/>
+
+			<IDSymbol name="cmdidAttachToAny" value="0x0100" />
+		</GuidSymbol>
+
+		<!-- This is the guid used to group the menu commands together -->
+		<GuidSymbol name="guidAttachToAnyCmdGroup" value="{245c3215-3d66-40e8-bafe-29fb71a00061}">
+			<IDSymbol name="idAttachToAnyMain" value="0x0101" />
+			<IDSymbol name="AttachToAnyMenuGroup" value="0x1020" />
 
 			<!-- Dynamic Items -->
 			<IDSymbol name="cmdidAttachToAny001" value="0x0200" />
