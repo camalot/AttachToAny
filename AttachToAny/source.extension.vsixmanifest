@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 	<Metadata>
-		<Identity Id="177f0816-76a7-401a-87d5-e793c9def1d1" Version="1.0.2" Language="en-US" Publisher="Ryan Conrad" />
+		<Identity Id="177f0816-76a7-401a-87d5-e793c9def1d1" Version="1.0.3" Language="en-US" Publisher="Ryan Conrad" />
 		<DisplayName>AttachToAny</DisplayName>
 		<Description xml:space="preserve">Attach Visual Studio to any running process. Configure up to 20 shortcuts for attaching Visual Studio debugger to.
 ***Currently in Beta***

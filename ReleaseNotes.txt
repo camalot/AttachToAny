@@ -1,3 +1,6 @@
+1.0.3
+	- fixed the issue with changes not persisting to storage.
+
 1.0.2
 	- fixed the process name for IIS. It will not affect any of your configurations, it will only fix the incorrectly named "wp3.exe" process to "w3wp.exe".
 
