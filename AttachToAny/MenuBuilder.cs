@@ -50,13 +50,12 @@ namespace RyanConrad.AttachToAny {
 					delegate ( object s, EventArgs e ) {
 						if ( OptionsPage.DTE != null ) {
 							// todo: multiple matches dialog.
+							// there should be some type of window to pick which process if there are multiple matches.
 							foreach ( EnvDTE.Process process in OptionsPage.DTE.Debugger.LocalProcesses ) {
 								if ( descriptor.ProcessNames.Any ( p => process.Name.EndsWith ( p ) ) ) {
 									process.Attach ( );
 								}
 							}
-						} else {
-							Debug.WriteLine ( "DTE is NULL" );
 						}
 					},
 					commandIdentifier,

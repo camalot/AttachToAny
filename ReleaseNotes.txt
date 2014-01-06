@@ -1,2 +1,6 @@
-Version: 1.0
+1.0.1
+	- bug fix for items that are removed still showing in the menu
+	- cleaner menu system. Items are now a submenu of Tools -> AttachToAny
+
+1.0
 	- Initial release.

@@ -32,7 +32,7 @@ namespace RyanConrad.AttachToAny.Options {
 
 		protected override void OnApply ( PageApplyEventArgs e ) {
 			if ( e.ApplyBehavior == ApplyKind.Apply ) {
-
+				LoadSettingsFromStorage ( );
 			}
 			base.OnApply ( e );
 		}
@@ -113,11 +113,16 @@ namespace RyanConrad.AttachToAny.Options {
 							} else {
 								item = Attachables[i];
 							}
-
-							key.SetValue ( ATASettings.Keys.AttachDescriptorName.With ( i ), item.Name );
-							key.SetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), item.Enabled.ToString ( ).ToLowerInvariant ( ) );
-							key.SetValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), String.Join ( ";", item.ProcessNames ) );
-
+							if ( String.IsNullOrWhiteSpace ( item.Name ) && item.ProcessNames.Count ( ) == 0 ) {
+								// this should remove "cleared" items
+								key.DeleteValue ( ATASettings.Keys.AttachDescriptorName.With ( i ), false );
+								key.DeleteValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), false );
+								key.DeleteValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), false );
+							} else {
+								key.SetValue ( ATASettings.Keys.AttachDescriptorName.With ( i ), item.Name );
+								key.SetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), item.Enabled.ToString ( ).ToLowerInvariant ( ) );
+								key.SetValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), String.Join ( ";", item.ProcessNames ) );
+							}
 						}
 					}
 				}
