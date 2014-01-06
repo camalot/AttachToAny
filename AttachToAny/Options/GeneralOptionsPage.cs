@@ -52,12 +52,14 @@ namespace RyanConrad.AttachToAny.Options {
 						string path = this.SettingsRegistryPath;
 						object automationObject = this.AutomationObject;
 
-						RegistryKey key = rootKey.OpenSubKey ( path, false /* writable */);
+						RegistryKey key = rootKey.OpenSubKey ( path, true /* writable */);
 						if ( key != null ) {
 							using ( key ) {
 
 								for ( int i = 0; i < ATAConstants.MaxCommands; i++ ) {
 									if ( key.GetValueNames ( ).Any ( x => x.Equals ( ATASettings.Keys.AttachDescriptorName.With ( i ) ) ) ) {
+										Migrator.IISFix ( key, i );
+
 										items.Add ( new AttachDescriptor {
 											Name = (string)key.GetValue ( ATASettings.Keys.AttachDescriptorName.With ( i ) ),
 											Enabled = bool.Parse ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ) ) ),

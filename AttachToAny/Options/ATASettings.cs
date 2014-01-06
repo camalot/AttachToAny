@@ -19,7 +19,7 @@ namespace RyanConrad.AttachToAny.Options {
 			var items = new List<AttachDescriptor> ( ) {
 					new AttachDescriptor {
 						Name = "IIS",
-						ProcessNames = new string[] { "wp3.exe" },
+						ProcessNames = new string[] { "w3wp.exe" },
 					},
 
 					new AttachDescriptor {
