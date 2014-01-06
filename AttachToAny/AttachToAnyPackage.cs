@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using RyanConrad.AttachToAny.Dialog;
 using RyanConrad.AttachToAny.Options;
 
 
@@ -108,6 +112,14 @@ namespace RyanConrad.AttachToAny {
 		}
 		#endregion
 
+		internal static void ShowProcessManagerDialog ( IEnumerable<EnvDTE.Process> processes) {
+			DialogWindow window = new ProcessSelectionWindow ( processes );
+			try {
+				window.ShowModal ( );
+			} catch ( TargetInvocationException ex ) {
+				// todo: handle exception...
+			}
+		}
 
 		private void ShowOptionPageSafe<T> ( ) {
 			try {

@@ -19,7 +19,7 @@ namespace RyanConrad.AttachToAny.Options {
 
 
 		public GeneralOptionsPage ( ) {
-
+			ChooseProcess = true;
 		}
 
 		public event EventHandler<EventArgs> SettingsLoaded;
@@ -27,12 +27,22 @@ namespace RyanConrad.AttachToAny.Options {
 		[Editor ( typeof ( CollectionEditor<AttachDescriptor> ), typeof ( UITypeEditor ) )]
 		[TypeConverter ( typeof ( IListTypeConverter ) )]
 		[Category ( "Attach To Any" )]
+		[LocDisplayName("Attachables")]
 		[Description ( "The items that can be used to attach to processes for debugging." )]
 		public ReadOnlyCollection<AttachDescriptor> Attachables { get; set; }
 
+		[Category("Attach To Any")]
+		[LocDisplayName("Choose which Process")]
+		[Description("Where there are multiple instances of a process, show a dialog that will allow you to choose which process to attach to.")]
+		[DefaultValue(true)]
+		public bool ChooseProcess { get; set; }
+
+
 		protected override void OnApply ( PageApplyEventArgs e ) {
 			if ( e.ApplyBehavior == ApplyKind.Apply ) {
+				// save the changes
 				SaveSettingsToStorage ( );
+				// reload the attachables.
 				LoadSettingsFromStorage ( );
 			}
 			base.OnApply ( e );

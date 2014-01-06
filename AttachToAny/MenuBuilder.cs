@@ -51,11 +51,29 @@ namespace RyanConrad.AttachToAny {
 						if ( OptionsPage.DTE != null ) {
 							// todo: multiple matches dialog.
 							// there should be some type of window to pick which process if there are multiple matches.
+
+				
+							var procList = new List<EnvDTE.Process>();
+
 							foreach ( EnvDTE.Process process in OptionsPage.DTE.Debugger.LocalProcesses ) {
 								if ( descriptor.ProcessNames.Any ( p => process.Name.EndsWith ( p ) ) ) {
-									process.Attach ( );
+									procList.Add ( process );
 								}
 							}
+
+							if ( procList.Count == 0 ) {
+								return;
+							}
+
+
+							// Where there is only 1, or "best choice"
+							if ( procList.Count == 1 || !OptionsPage.ChooseProcess ) {
+								procList.First ( ).Attach ( );
+								return;
+							}
+
+							AttachToAnyPackage.ShowProcessManagerDialog ( procList );
+
 						}
 					},
 					commandIdentifier,

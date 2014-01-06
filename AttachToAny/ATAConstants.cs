@@ -4,6 +4,9 @@ using System;
 
 namespace RyanConrad.AttachToAny {
 	static class ATAConstants {
+
+		public const string IIS_PROCESS = "w3wp.exe";
+
 		public const uint MaxCommands = 20;
 
 		public const uint idAttachToAnyMain = 0x0101;
