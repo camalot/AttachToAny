@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Web.Administration;
 using RyanConrad.AttachToAny.Extensions;
 
-namespace RyanConrad.AttachToAny.Dialog {
+namespace RyanConrad.AttachToAny.Models {
 	public class ProcessItem {
 		public ProcessItem ( EnvDTE.Process baseProcess ) {
 			this.BaseProcess = baseProcess;

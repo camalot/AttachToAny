@@ -1,5 +1,7 @@
 1.0.4
-	- Added a dialog 
+	- Added a dialog for selecting which process to attach to. 
+	- Added option to use "best guess" when attaching, or open the dialog when there are multiple processes that match.
+	- updated preview to reflect the submenu.
 
 1.0.3
 	- fixed the issue with changes not persisting to storage.

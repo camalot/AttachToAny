@@ -20,17 +20,20 @@ namespace RyanConrad.AttachToAny.Options {
 		/// <param name="descriptorIndex"></param>
 		internal static void IISFix ( Microsoft.Win32.RegistryKey key, int descriptorIndex ) {
 			try {
-			var name = (string)key.GetValue ( ATASettings.Keys.AttachDescriptorName.With ( descriptorIndex ) );
-				var processGroup =  ATASettings.Keys.AttachDescriptorProcessNames.With ( descriptorIndex );
+				// get the name.
+				var name = (string)key.GetValue ( ATASettings.Keys.AttachDescriptorName.With ( descriptorIndex ) );
+				var processGroup = ATASettings.Keys.AttachDescriptorProcessNames.With ( descriptorIndex );
 				var allProcesses = ( (string)key.GetValue ( processGroup ) )
 														.Split ( new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries );
-				var hasWp3 = allProcesses.Any(s => string.Compare(s, "wp3.exe",true) == 0);
+				// does it have the fucked up process name?
+				var hasWp3 = allProcesses.Any ( s => string.Compare ( s, "wp3.exe", true ) == 0 );
+				// if it is iis, and it has the wrong process, fix that shit.
 				if ( string.Compare ( name, "iis", true ) == 0 && hasWp3 ) {
 					var newList = allProcesses.Where ( s => string.Compare ( s, "wp3.exe", true ) != 0 ).Concat ( new string[] { "w3wp.exe" } );
-					key.SetValue ( processGroup, string.Join ( ";", newList ) ); 
+					key.SetValue ( processGroup, string.Join ( ";", newList ) );
 				}
-			} catch (Exception) {
-
+			} catch ( Exception ) {
+				// if we dont have access to write, there is a problem.
 			}
 		}
 	}

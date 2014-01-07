@@ -13,8 +13,9 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using RyanConrad.AttachToAny.Components;
 using RyanConrad.AttachToAny.Extensions;
+using RyanConrad.AttachToAny.Options;
 
-namespace RyanConrad.AttachToAny.Options {
+namespace RyanConrad.AttachToAny.Dialog {
 	public class GeneralOptionsPage : DialogPage {
 
 
@@ -27,14 +28,14 @@ namespace RyanConrad.AttachToAny.Options {
 		[Editor ( typeof ( CollectionEditor<AttachDescriptor> ), typeof ( UITypeEditor ) )]
 		[TypeConverter ( typeof ( IListTypeConverter ) )]
 		[Category ( "Attach To Any" )]
-		[LocDisplayName("Attachables")]
+		[LocDisplayName ( "Attachables" )]
 		[Description ( "The items that can be used to attach to processes for debugging." )]
 		public ReadOnlyCollection<AttachDescriptor> Attachables { get; set; }
 
-		[Category("Attach To Any")]
-		[LocDisplayName("Choose which Process")]
-		[Description("Where there are multiple instances of a process, show a dialog that will allow you to choose which process to attach to.")]
-		[DefaultValue(true)]
+		[Category ( "Attach To Any" )]
+		[LocDisplayName ( "Choose which Process" )]
+		[Description ( "Where there are multiple instances of a process, show a dialog that will allow you to choose which process to attach to. Setting to false will use a 'best guess' on which process to attach to." )]
+		[DefaultValue ( true )]
 		public bool ChooseProcess { get; set; }
 
 
@@ -43,6 +44,8 @@ namespace RyanConrad.AttachToAny.Options {
 				// save the changes
 				SaveSettingsToStorage ( );
 				// reload the attachables.
+				// if we don't reload, the menu will not be updated...
+				// can we just "notify" of the reload?
 				LoadSettingsFromStorage ( );
 			}
 			base.OnApply ( e );
@@ -52,17 +55,15 @@ namespace RyanConrad.AttachToAny.Options {
 			base.OnClosed ( e );
 		}
 
+		// based on information from : https://github.com/hesam/SketchSharp/blob/master/SpecSharp/SpecSharp/Microsoft.VisualStudio.Shell/DialogPage.cs
 		public override void LoadSettingsFromStorage ( ) {
 			var items = new List<AttachDescriptor> ( );
 			try {
-				var package = GetServiceSafe<AttachToAnyPackage> ();
+				var package = GetServiceSafe<AttachToAnyPackage> ( );
 				Debug.Assert ( package != null, "No package service; we cannot load settings" );
 				if ( package != null ) {
 					using ( RegistryKey rootKey = package.UserRegistryRoot ) {
-
 						string path = this.SettingsRegistryPath;
-						object automationObject = this.AutomationObject;
-
 						RegistryKey key = rootKey.OpenSubKey ( path, true /* writable */);
 						if ( key != null ) {
 							using ( key ) {
@@ -82,13 +83,13 @@ namespace RyanConrad.AttachToAny.Options {
 										items.Add ( new AttachDescriptor ( ) );
 									}
 								}
-								
+
 							}
 						}
 					}
 				}
 
-			} catch ( Exception ex) {
+			} catch ( Exception ex ) {
 				Debug.WriteLine ( ex.ToString ( ) );
 			}
 			if ( items.Count == 0 ) {
@@ -101,10 +102,54 @@ namespace RyanConrad.AttachToAny.Options {
 
 		}
 
+		// based on information from : https://github.com/hesam/SketchSharp/blob/master/SpecSharp/SpecSharp/Microsoft.VisualStudio.Shell/DialogPage.cs
 		public override void LoadSettingsFromXml ( Microsoft.VisualStudio.Shell.Interop.IVsSettingsReader reader ) {
+			var items = new List<AttachDescriptor> ( );
+			try {
+				for ( int i = 0; i < ATAConstants.MaxCommands; i++ ) {
+					var nameKey = ATASettings.Keys.AttachDescriptorName.With ( i );
+					var enabledKey = ATASettings.Keys.AttachDescriptorEnabled.With ( i );
+					var processesKey = ATASettings.Keys.AttachDescriptorProcessNames.With ( i );
+
+					// read from the xml feed
+					var item = new AttachDescriptor ( );
+					try {
+						string value = null;
+						reader.ReadSettingString ( nameKey, out value );
+						if ( value != null ) {
+							item.Name = value;
+							value = null;
+						}
+
+						reader.ReadSettingString ( enabledKey, out value );
+						if ( value != null ) {
+							item.Enabled = bool.Parse ( value.ToString ( ).ToLowerInvariant ( ) );
+							value = null;
+						}
+						reader.ReadSettingString ( enabledKey, out value );
+						if ( value != null ) {
+							item.ProcessNames = value.Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
+							value = null;
+						}
+					} catch ( Exception ) { }
+
+					if ( !String.IsNullOrWhiteSpace ( item.Name ) && ( item.ProcessNames != null && item.ProcessNames.Count ( ) > 0 ) ) {
+						items.Add ( item );
+					} else {
+						// this ensures it is a clean item if any of the other properties were saved previously.
+						items.Add ( new AttachDescriptor ( ) );
+					}
+				}
+			} catch ( Exception ) {
+
+			}
+			Attachables = new ReadOnlyCollection<AttachDescriptor> ( items );
+			// notify of newly loaded settings
+			OnSettingsLoaded ( EventArgs.Empty );
 			base.LoadSettingsFromXml ( reader );
 		}
 
+		// based on information from : https://github.com/hesam/SketchSharp/blob/master/SpecSharp/SpecSharp/Microsoft.VisualStudio.Shell/DialogPage.cs
 		public override void SaveSettingsToStorage ( ) {
 			var package = GetServiceSafe<AttachToAnyPackage> ( );
 			Debug.Assert ( package != null, "No package service; we cannot load settings" );
@@ -144,7 +189,24 @@ namespace RyanConrad.AttachToAny.Options {
 
 		}
 
+		// based on information from : https://github.com/hesam/SketchSharp/blob/master/SpecSharp/SpecSharp/Microsoft.VisualStudio.Shell/DialogPage.cs
 		public override void SaveSettingsToXml ( Microsoft.VisualStudio.Shell.Interop.IVsSettingsWriter writer ) {
+			for ( int i = 0; i < ATAConstants.MaxCommands; i++ ) {
+				AttachDescriptor item;
+				if ( i >= Attachables.Count ) {
+					item = new AttachDescriptor ( );
+				} else {
+					item = Attachables[i];
+				}
+
+				if ( !String.IsNullOrWhiteSpace ( item.Name ) && item.ProcessNames.Count ( ) > 0 ) {
+					// only items with names and processes
+					writer.WriteSettingString ( ATASettings.Keys.AttachDescriptorName.With ( i ), item.Name );
+					writer.WriteSettingString ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), item.Enabled.ToString ( ).ToLowerInvariant ( ) );
+					writer.WriteSettingString ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), String.Join ( ";", item.ProcessNames ) );
+				}
+			}
+			
 			base.SaveSettingsToXml ( writer );
 		}
 
