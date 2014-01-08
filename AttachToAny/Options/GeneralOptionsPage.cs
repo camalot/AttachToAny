@@ -13,14 +13,14 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using RyanConrad.AttachToAny.Components;
 using RyanConrad.AttachToAny.Extensions;
-using RyanConrad.AttachToAny.Options;
+using RyanConrad.AttachToAny.Models;
 
-namespace RyanConrad.AttachToAny.Dialog {
+namespace RyanConrad.AttachToAny.Options {
 	public class GeneralOptionsPage : DialogPage {
 
 
 		public GeneralOptionsPage ( ) {
-			ChooseProcess = true;
+
 		}
 
 		public event EventHandler<EventArgs> SettingsLoaded;
@@ -32,21 +32,21 @@ namespace RyanConrad.AttachToAny.Dialog {
 		[Description ( "The items that can be used to attach to processes for debugging." )]
 		public ReadOnlyCollection<AttachDescriptor> Attachables { get; set; }
 
-		[Category ( "Attach To Any" )]
-		[LocDisplayName ( "Choose which Process" )]
-		[Description ( "Where there are multiple instances of a process, show a dialog that will allow you to choose which process to attach to. Setting to false will use a 'best guess' on which process to attach to." )]
-		[DefaultValue ( true )]
-		public bool ChooseProcess { get; set; }
+		//[Category ( "Attach To Any" )]
+		//[LocDisplayName ( "Choose which Process" )]
+		//[DisplayName ( "Choose which Process" )]
+		//[Description ( "Where there are multiple instances of a process, show a dialog that will allow you to choose which process to attach to. Setting to false will use a 'best guess' on which process to attach to." )]
+		//[DefaultValue ( false )]
+		//public bool ChooseProcess { get; set; }
 
 
 		protected override void OnApply ( PageApplyEventArgs e ) {
 			if ( e.ApplyBehavior == ApplyKind.Apply ) {
 				// save the changes
 				SaveSettingsToStorage ( );
-				// reload the attachables.
-				// if we don't reload, the menu will not be updated...
-				// can we just "notify" of the reload?
-				LoadSettingsFromStorage ( );
+				if ( SettingsLoaded != null ) {
+					SettingsLoaded ( this, EventArgs.Empty );
+				}
 			}
 			base.OnApply ( e );
 		}
@@ -71,12 +71,16 @@ namespace RyanConrad.AttachToAny.Dialog {
 								for ( int i = 0; i < ATAConstants.MaxCommands; i++ ) {
 									if ( key.GetValueNames ( ).Any ( x => x.Equals ( ATASettings.Keys.AttachDescriptorName.With ( i ) ) ) ) {
 										Migrator.IISFix ( key, i );
-
+										var enabled = true;
+										bool.TryParse ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ) ), out enabled );
+										var chooseProcess = false;
+										bool.TryParse ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorChooseProcess.With ( i ) ), out chooseProcess );
 										items.Add ( new AttachDescriptor {
 											Name = (string)key.GetValue ( ATASettings.Keys.AttachDescriptorName.With ( i ) ),
-											Enabled = bool.Parse ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ) ) ),
+											Enabled = enabled,
 											ProcessNames = ( (string)key.GetValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ) ) )
-														.Split ( new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries )
+														.Split ( new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries ),
+											ChooseProcess = chooseProcess
 										} );
 									} else {
 										// add an empty one
@@ -110,7 +114,7 @@ namespace RyanConrad.AttachToAny.Dialog {
 					var nameKey = ATASettings.Keys.AttachDescriptorName.With ( i );
 					var enabledKey = ATASettings.Keys.AttachDescriptorEnabled.With ( i );
 					var processesKey = ATASettings.Keys.AttachDescriptorProcessNames.With ( i );
-
+					var chooseKey = ATASettings.Keys.AttachDescriptorChooseProcess.With ( i );
 					// read from the xml feed
 					var item = new AttachDescriptor ( );
 					try {
@@ -123,10 +127,19 @@ namespace RyanConrad.AttachToAny.Dialog {
 
 						reader.ReadSettingString ( enabledKey, out value );
 						if ( value != null ) {
-							item.Enabled = bool.Parse ( value.ToString ( ).ToLowerInvariant ( ) );
+							var enabled = true;
+							bool.TryParse ( value.ToString ( ).ToLowerInvariant ( ), out enabled );
+							item.Enabled = enabled;
 							value = null;
 						}
-						reader.ReadSettingString ( enabledKey, out value );
+						reader.ReadSettingString ( chooseKey, out value );
+						if ( value != null ) {
+							var choose = false;
+							bool.TryParse ( value.ToString ( ).ToLowerInvariant ( ), out choose );
+							item.Enabled = choose;
+							value = null;
+						}
+						reader.ReadSettingString ( processesKey, out value );
 						if ( value != null ) {
 							item.ProcessNames = value.Split ( new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries );
 							value = null;
@@ -176,10 +189,12 @@ namespace RyanConrad.AttachToAny.Dialog {
 								key.DeleteValue ( ATASettings.Keys.AttachDescriptorName.With ( i ), false );
 								key.DeleteValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), false );
 								key.DeleteValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), false );
+								key.DeleteValue ( ATASettings.Keys.AttachDescriptorChooseProcess.With ( i ), false );
 							} else {
 								key.SetValue ( ATASettings.Keys.AttachDescriptorName.With ( i ), item.Name );
 								key.SetValue ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), item.Enabled.ToString ( ).ToLowerInvariant ( ) );
 								key.SetValue ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), String.Join ( ";", item.ProcessNames ) );
+								key.SetValue ( ATASettings.Keys.AttachDescriptorChooseProcess.With ( i ), item.ChooseProcess.ToString ( ).ToLowerInvariant ( ) );
 							}
 						}
 					}
@@ -204,9 +219,10 @@ namespace RyanConrad.AttachToAny.Dialog {
 					writer.WriteSettingString ( ATASettings.Keys.AttachDescriptorName.With ( i ), item.Name );
 					writer.WriteSettingString ( ATASettings.Keys.AttachDescriptorEnabled.With ( i ), item.Enabled.ToString ( ).ToLowerInvariant ( ) );
 					writer.WriteSettingString ( ATASettings.Keys.AttachDescriptorProcessNames.With ( i ), String.Join ( ";", item.ProcessNames ) );
+					writer.WriteSettingString ( ATASettings.Keys.AttachDescriptorChooseProcess.With ( i ), item.ChooseProcess.ToString().ToLowerInvariant() );
 				}
 			}
-			
+
 			base.SaveSettingsToXml ( writer );
 		}
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RyanConrad.AttachToAny.Extensions;
+using RyanConrad.AttachToAny.Models;
 
 namespace RyanConrad.AttachToAny.Options {
 	static class ATASettings {
@@ -12,7 +13,7 @@ namespace RyanConrad.AttachToAny.Options {
 			public const String AttachDescriptorName = "AttachDescriptorName{0}";
 			public const String AttachDescriptorProcessNames = "AttachDescriptorProcessNames{0}";
 			public const String AttachDescriptorEnabled = "AttachDescriptorEnabled{0}";
-			public const String AttachDescriptorPrependAttachTo = "AttachDescriptorPrependAttachTo{0}";
+			public const String AttachDescriptorChooseProcess = "AttachDescriptorChooseProcess{0}";
 		}
 
 		public static List<AttachDescriptor> DefaultAttachables ( ) {

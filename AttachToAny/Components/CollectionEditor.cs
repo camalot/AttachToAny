@@ -11,6 +11,7 @@ namespace RyanConrad.AttachToAny.Components {
 	public class CollectionEditor : System.ComponentModel.Design.CollectionEditor {
 		public CollectionEditor ( Type type )
 			: base ( type ) {
+				Debug.WriteLine ( "Create Collection Editor" );
 		}
 
 		private CollectionForm EditorForm { get; set; }

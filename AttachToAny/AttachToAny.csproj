@@ -131,7 +131,8 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttachDescriptor.cs" />
+    <Compile Include="Components\DescriptorMenuCommand.cs" />
+    <Compile Include="Models\AttachDescriptor.cs" />
     <Compile Include="Models\ProcessItem.cs" />
     <Compile Include="Dialog\ProcessSelectionWindow.xaml.cs">
       <DependentUpon>ProcessSelectionWindow.xaml</DependentUpon>
@@ -144,7 +145,7 @@
     <Compile Include="Extensions\Type.cs" />
     <Compile Include="ATAGuids.cs" />
     <Compile Include="MenuBuilder.cs" />
-    <Compile Include="Dialog\GeneralOptionsPage.cs">
+    <Compile Include="Options\GeneralOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Options\Migrator.cs" />

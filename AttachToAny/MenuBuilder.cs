@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using RyanConrad.AttachToAny.Components;
 using RyanConrad.AttachToAny.Dialog;
+using RyanConrad.AttachToAny.Models;
 using RyanConrad.AttachToAny.Options;
 
 namespace RyanConrad.AttachToAny {
@@ -32,7 +34,7 @@ namespace RyanConrad.AttachToAny {
 					int id = baseAttactListId + i;
 					AddAttachCommand ( mcs, id, x => x.Attachables[i] );
 				}
-			} 
+			}
 		}
 
 		/// <summary>
@@ -43,17 +45,20 @@ namespace RyanConrad.AttachToAny {
 		private void AddAttachCommand ( OleMenuCommandService mcs, int commandId, Func<GeneralOptionsPage, AttachDescriptor> getDescriptor ) {
 			if ( mcs != null ) {
 				var commandIdentifier = new CommandID ( ATAGuids.guidAttachToAnyCmdGroup, commandId );
-				if ( mcs.FindCommand ( commandIdentifier ) != null ) {
+				var existing = mcs.FindCommand(commandIdentifier);
+				var descriptor = getDescriptor ( OptionsPage );
+				if ( existing != null ) {
+					( (DescriptorMenuCommand)existing ).Descriptor = descriptor;
 					return;
 				}
-				var descriptor = getDescriptor ( OptionsPage );
-				var menuItem = new OleMenuCommand (
-					delegate ( object s, EventArgs e ) {
+				var menuItem = new DescriptorMenuCommand (
+					( s, e ) => {
+						var menu = (DescriptorMenuCommand)s;
 						if ( OptionsPage.DTE != null ) {
-							var procList = new List<EnvDTE.Process>();
+							var procList = new List<EnvDTE.Process> ( );
 
 							foreach ( EnvDTE.Process process in OptionsPage.DTE.Debugger.LocalProcesses ) {
-								if ( descriptor.ProcessNames.Any ( p => process.Name.EndsWith ( p ) ) ) {
+								if ( menu.Descriptor.ProcessNames.Any ( p => process.Name.EndsWith ( p ) ) ) {
 									procList.Add ( process );
 								}
 							}
@@ -63,21 +68,14 @@ namespace RyanConrad.AttachToAny {
 							}
 
 							// Where there is only 1, or "best choice"
-							if ( procList.Count == 1 || !OptionsPage.ChooseProcess ) {
+							if ( procList.Count == 1 || !menu.Descriptor.ChooseProcess ) {
 								procList.First ( ).Attach ( );
 								return;
 							}
 
 							AttachToAnyPackage.ShowProcessManagerDialog ( procList );
 						}
-					},
-					commandIdentifier,
-					descriptor.ToString ( )
-				);
-				menuItem.BeforeQueryStatus += ( s, e ) => {
-					menuItem.Visible = descriptor.Enabled && descriptor.ProcessNames.Count ( ) > 0;
-					menuItem.Text = descriptor.ToString ( );
-				};
+					}, commandId, descriptor );
 				mcs.AddCommand ( menuItem );
 			}
 		}

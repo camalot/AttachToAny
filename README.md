@@ -5,7 +5,7 @@ AttachToAny
 
 Attach to processes for debugging in Visual Studio
 
-![](http://lh6.ggpht.com/-hun9bE9XSIY/UsoLpFSzRPI/AAAAAAAAkUw/5zLJKM2xXO0/image_thumb%25255B2%25255D.png?imgmax=800)
+![](http://lh5.ggpht.com/-3gfr1-DP4lQ/Usv_tms7yOI/AAAAAAAAkZY/OIheXjtjsQo/ata-preview_thumb%25255B2%25255D.png?imgmax=800)
 
 ![](http://lh5.ggpht.com/-PF1ej1HpudY/UsoLquzE8rI/AAAAAAAAkVA/JcZF_Mhcltc/image_thumb%25255B5%25255D.png?imgmax=800)
 
