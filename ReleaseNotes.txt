@@ -1,3 +1,6 @@
+1.0.6
+	- Visual Studio 2015 support
+
 1.0.4
 	- Added a dialog for selecting which process to attach to. 
 	- Added option to use "best guess" when attaching, or open the dialog when there are multiple processes that match.
